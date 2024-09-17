@@ -27,7 +27,9 @@ public class Brain : MonoBehaviour
     private float accelerationPR = 0;
     private int accelerationProm = 0;
     private float timeSurvived = 0;
-    
+    private float pointsVisited = 0;
+    private Queue<Transform> points = new Queue<Transform>();
+
     void Start()
     {
         Init();
@@ -162,18 +164,46 @@ public class Brain : MonoBehaviour
             }
             else
             {
-                s+= Vector3.Distance(InitialPos,transform.position)*.5f;
+                if (transform.position.z > 80)
+                {
+                    s += Vector3.Distance(InitialPos, transform.position) *8;
+                }
+                s += Vector3.Distance(InitialPos,transform.position)*.5f;
             }
         }
-        
+        if(Gen.Instance.generations > 50)
+        {
+            s += pointsVisited * 500;
+        }
         score += Mathf.Pow(s,2);
     }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Border")
         {
             live =false;
+            Gen.Instance.poblationalive--;
+        }
+
+        if (other.tag == "Trigg")
+        {
+            Transform temp = other.transform;
+
+            if (!points.Contains(temp))
+            {
+                points.Enqueue(temp);
+                if (points.Count > 8)
+                {
+                    points.Dequeue();
+                }
+                pointsVisited++;
+            }
+            else
+            {
+                points.Clear();
+                pointsVisited =0;
+
+            }
             Gen.Instance.poblationalive--;
         }
     }

@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Border
+  - Trigg
   layers:
   - Default
   - TransparentFX
