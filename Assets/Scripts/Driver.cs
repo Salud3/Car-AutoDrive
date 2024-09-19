@@ -18,8 +18,10 @@ public class Driver : MonoBehaviour
     private void Update()
     {
         forward = transform.TransformDirection(Vector3.forward)*30;
-        left = transform.TransformDirection(new Vector3(.5f, 0, 1))*30;
-        right = transform.TransformDirection(new Vector3(-.5f, 0, 1))*30;
+        //left = transform.TransformDirection(new Vector3(.5f, 0, 1))*30;
+        left = transform.TransformDirection(new Vector3(.6f, 0, .75f))*30;
+        //right = transform.TransformDirection(new Vector3(-.5f, 0, 1))*30;
+        right = transform.TransformDirection(new Vector3(-.6f, 0, .75f))*30;
         
         pos = new Vector3(transform.position.x,transform.position.y+2,transform.position.z);
         

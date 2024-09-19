@@ -28,7 +28,16 @@ public class Gen : MonoBehaviour
     public int genMutateRate = 20;
     public int mutations = 5;
 
-    
+    public void timeup()
+    {
+        Time.timeScale += .1f;
+        Debug.Log(Time.timeScale);
+    }
+    public void timedown()
+    {
+        Time.timeScale -= .1f;
+        Debug.Log(Time.timeScale);
+    }
 
     private void Start()
     {
@@ -141,12 +150,14 @@ public class Gen : MonoBehaviour
         for(int i = 0; i < ia1.biases.Length; i++)
         {
             r.GetComponent<Brain>().biases[i] = Matrix.SinglePointCross(ia1.biases[i], ia2.biases[i]);
+
         }
 
         for (int i = 0; i < ia1.weights.Length; i++)
         {
             r.GetComponent<Brain>().weights[i] = Matrix.SinglePointCross(ia1.weights[i], ia2.weights[i]);
         }
+        r.GetComponent<Brain>().scoreType = (Gen.ScoreType)UnityEngine.Random.Range((int)ia1.scoreType, (int)ia2.scoreType+1);
         return r;
 
     }
@@ -169,6 +180,8 @@ public class Gen : MonoBehaviour
         {
             wIa.weights[i] = ia.weights[i];
         }
+
+        wIa.scoreType = ia.scoreType;
 
         return wCopy;
     }   

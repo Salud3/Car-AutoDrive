@@ -46,10 +46,10 @@ public class Brain : MonoBehaviour
         biases = new Matrix[layers];
         inputs = new Matrix(1, 3);
 
-        if (scoreType == Gen.ScoreType.Nul)
+        /*if (scoreType == Gen.ScoreType.Nul)
         {
             scoreType = (Gen.ScoreType)UnityEngine.Random.Range(1, 3);
-        }
+        }*/
 
         for (int i = 0; i < layers; i++)
         {
@@ -180,7 +180,9 @@ public class Brain : MonoBehaviour
         {
             s += pointsVisited * 500;
         }
+
         score += Mathf.Pow(s,2);
+        
         /*
          * 
         if (scoreType == Gen.ScoreType.Dist)
@@ -221,6 +223,10 @@ public class Brain : MonoBehaviour
         if (other.tag == "Border")
         {
             live =false;
+            if (score < 1.865325e+09)
+            {
+                score /= 2;
+            }
             Gen.Instance.poblationalive--;
         }
 
