@@ -21,7 +21,10 @@ public class Gen : MonoBehaviour
 
     public int percentBest = 5;
     public int percentRandom = 2;    
-    public int percentLast = 2;    
+    public int percentLast = 2;
+    public int bested;
+    public int randomness;
+    public int Lastest;    
     public int genMutateRate = 20;
     public int mutations = 5;
 
@@ -29,9 +32,10 @@ public class Gen : MonoBehaviour
 
     private void Start()
     {
-        percentBest = Mathf.RoundToInt(percentBest*.01f*initialPoblation);
-        percentRandom = Mathf.RoundToInt(percentRandom * .01f * initialPoblation);
-        percentLast = Mathf.RoundToInt(percentLast * .01f * initialPoblation);
+        bested = Mathf.RoundToInt((percentBest*initialPoblation)/100);
+        randomness = Mathf.RoundToInt((percentRandom*initialPoblation)/100);
+        Lastest = Mathf.RoundToInt((percentLast*initialPoblation)/100);
+        
         Instance = this;
         poblationalive = initialPoblation;
         drivers = new List<GameObject>();
@@ -49,12 +53,18 @@ public class Gen : MonoBehaviour
         txtGenerations.text = "Generations: " + generations.ToString();
         if(poblationalive <= 0)
         {
+            bested = Mathf.RoundToInt((percentBest*initialPoblation)/100);
+            randomness = Mathf.RoundToInt((percentRandom*initialPoblation)/100);
+            Lastest = Mathf.RoundToInt((percentLast*initialPoblation)/100);
+            
             NextGeneration();
             DeleteOld();
             poblationalive = initialPoblation;
             generations++;
             
         }
+        
+        
     }
 
     void DeleteOld()
@@ -76,64 +86,28 @@ public class Gen : MonoBehaviour
 
         for (int i = 0; i < drivers.Count; i++)
         {
-            if (i < percentBest) //Mejores
+            if (i < bested) //Mejores
             {
                 nDrivers.Add(GetCopy(drivers[i])); 
+                Debug.Log("Spawn Best");
             }
-            else if (i < percentRandom && i > percentBest) //Hijos de los mejores
+            else if (i < randomness && i > bested) //Hijos de los mejores
             {
-                nDrivers.Add(Cross(drivers[i- Mathf.FloorToInt(drivers.Count * .10f)], drivers[i- Mathf.FloorToInt(drivers.Count * .08f)]));
+                nDrivers.Add(Cross(drivers[ percentBest - i ], drivers[i] ) );
+                Debug.Log("Spawn Cross Best");
             }
-            else if (i < percentLast && i > percentRandom) //Random
+            else if (i > randomness && randomness - i < Lastest) //Random
             {
-                nDrivers.Add(Cross(drivers[Random.Range(0, drivers.Count - 1)], drivers[Random.Range(0, drivers.Count - 1)]));
+                nDrivers.Add(Cross(drivers[Random.Range(i , drivers.Count - 1)], drivers[Random.Range(0, drivers.Count - 1)]));
+                Debug.Log("Spawn Random");
             }
             else //Peores
             {
                 nDrivers.Add(Cross(drivers[i], drivers[i - 1]));
+                Debug.Log("Spawn Last");
             }
         }
 
-        //for (int i = 0; i<(int)drivers.Count*.20f; i++)
-        //{
-        //    for (int j = 1; j< (int)drivers.Count*.20f; j++)
-        //    {
-        //        nDrivers.Add(Cross(nDrivers[i], nDrivers[j]));
-        //    }
-        //}
-
-        //for (int i = 0; i < (int)drivers.Count * .40f; i++)
-        //{
-        //    for (int j = 1; j < (int)drivers.Count * .40f; j++)
-        //    {
-        //        nDrivers.Add(Cross(nDrivers[i], nDrivers[j]));
-        //    }
-        //}
-
-        //for (int i = 0; i < bestScore; i++)
-        //{
-        //    nDrivers.Add(GetCopy(drivers[i]));
-        //}
-
-        //for (int i = 0; i < bestScore; i++)
-        //{
-        //    nDrivers.Add(GetCopy(drivers[i]));    
-        //}
-
-        //for (int i = 0; i < lastScore; i++)
-        //{
-        //    nDrivers.Add(GetCopy(drivers[initialPoblation - 1 - i]));
-        //}
-
-        //int k = bestScore+lastScore;
-
-        //while (k < initialPoblation  && k>0)
-        //{
-        //    int i = Random.Range(0, k-1);
-        //    int j = Random.Range(0, k-1);
-        //    nDrivers.Add(Cross(nDrivers[i], nDrivers[j]));
-        //    k++;
-        //}
 
         for (int i = 0; i < mutationRate; i++)
         {

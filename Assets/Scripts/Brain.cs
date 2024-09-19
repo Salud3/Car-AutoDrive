@@ -30,8 +30,11 @@ public class Brain : MonoBehaviour
     private float pointsVisited = 0;
     private Queue<Transform> points = new Queue<Transform>();
 
+    public Rigidbody rg;
+
     void Start()
     {
+        rg = GetComponent<Rigidbody>();
         Init();
         
     }
@@ -87,9 +90,10 @@ public class Brain : MonoBehaviour
             inputs.SetAt(0,2,LD);
             Resolve();
             
-            transform.Translate(Vector3.forward*acceleration);
+            transform.Translate(Vector3.forward * acceleration);
+            rg.velocity = Vector3.Normalize(rg.velocity);
             transform.eulerAngles = transform.eulerAngles + new Vector3(0, (rotation*90)*0.02f, 0);
-            
+ 
             
             distanceTraveled += Vector3.Distance(transform.position, lastPosition);
             lastPosition = transform.position;
@@ -139,7 +143,8 @@ public class Brain : MonoBehaviour
         float RD = GetComponent<Driver>().RightDistance;
         float LD = GetComponent<Driver>().LeftDistance;
         float s = (FD + LD) / 3;
-        if (scoreType == Gen.ScoreType.Dist)
+        
+         if (scoreType == Gen.ScoreType.Dist)
         {
             s += RD;
             float x = (distanceTraveled) * acceleration / 1000;
@@ -176,6 +181,40 @@ public class Brain : MonoBehaviour
             s += pointsVisited * 500;
         }
         score += Mathf.Pow(s,2);
+        /*
+         * 
+        if (scoreType == Gen.ScoreType.Dist)
+            {
+                s += RD;
+                float x = (distanceTraveled) * acceleration / 1000;
+                s += ((timeSurvived*2) + (distanceTraveled*9))-(Mathf.Pow(x,2)*Mathf.PI);
+            }
+            else if (scoreType == Gen.ScoreType.Tim)
+            {
+                Vector3 v = new Vector3(FD, 0 , RD-LD);
+                float x = timeSurvived * Mathf.Pow(v.x,5);
+                s += ((timeSurvived*9) + (distanceTraveled*1.5f))+ x *2.5f;
+            }
+            else
+            {   
+                scoreType = (Gen.ScoreType)UnityEngine.Random.Range(1,3);
+            }
+        
+            if (transform.position.z > InitialPos.z)
+            {
+                if (transform.position.x >10 || transform.position.x < -10)
+                {
+                    s+= Mathf.Pow(Vector3.Distance(InitialPos,transform.position),2);
+                }
+                else
+                {
+                    s+= Vector3.Distance(InitialPos,transform.position)*.5f;
+                }
+            }
+        
+            score += Mathf.Pow(s,2);
+         */
+        
     }
     private void OnTriggerEnter(Collider other)
     {

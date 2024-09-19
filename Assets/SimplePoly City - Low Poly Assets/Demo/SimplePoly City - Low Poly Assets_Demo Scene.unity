@@ -17190,15 +17190,18 @@ MonoBehaviour:
   txtGenerations: {fileID: 964809067}
   prefab: {fileID: 2973716384861341498, guid: b5b1a141ed02b454f9ef60b3abeffec1, type: 3}
   poblationalive: 0
-  initialPoblation: 80
-  mutationRate: 0.07
+  initialPoblation: 30
+  mutationRate: 0.058
   drivers: []
   newDrivers: []
-  percentBest: 20
-  percentRandom: 90
-  percentLast: 90
-  genMutateRate: 8
-  mutations: 5
+  percentBest: 10
+  percentRandom: 30
+  percentLast: 10
+  bested: 0
+  randomness: 0
+  Lastest: 0
+  genMutateRate: 5
+  mutations: 9
 --- !u!4 &719466834
 Transform:
   m_ObjectHideFlags: 0
